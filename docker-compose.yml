@@ -1,15 +1,15 @@
 version: '3'
 services:
-  api:
-      build: .
-      ports:
-      - "8080:80"
-      env_file:
-      - .env
-      links:
+#  api:
+#      build: .
+#      ports:
+#      - "8080:80"
+#      env_file:
+#      - .env
+#      links:
       # - read
       # - write
-      - booking
+#      - booking
   # read:
   #   image: "windingtree/wt-read-api"
   #   environment:
@@ -36,6 +36,8 @@ services:
   #   - "8082:8000"
   booking:
     image: "jimoshea/coolapp"
+    ports:
+      - "8083:8935"
     # environment:
     # - DB_CLIENT_OPTIONS='{"filename":"./dev.sqlite"}'
     # - DB_CLIENT=sqlite3
@@ -47,5 +49,3 @@ services:
     # - SUPPLIER_ID=0x123456
     # - WRITE_API_KEY=werdfs12
     # - WALLET_PASSWORD=windingtree windingtree/wt-booking-api
-    # ports:
-    # - "8083:8935"

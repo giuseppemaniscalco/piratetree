@@ -21,13 +21,14 @@ type HttpClient interface {
 }
 
 type Request struct {
-	HotelId string
+	OriginAddress string `json:"originAddress"`
+	HotelId       string `json:"hotelId"`
 	//TODO wt request property
 }
 
 type Response struct {
-	BookingId string
-	//TODO wt response property
+	Id     string `json:"id"`
+	Status string `json:"status"`
 }
 
 type windingTree struct {
@@ -35,8 +36,7 @@ type windingTree struct {
 	windingTreeUrl string
 }
 
-var test = `
-		{
+var test = `{
 		  "originAddress": "0x0275e1A76B1C3B67575e66074CdF4fD19D43983A",
 		  "hotelId": "0xcca04822Ad9c178bdf9da9091218e241f4C28042",
 		  "customer": {
@@ -74,8 +74,7 @@ var test = `
 			  }
 			]
 		  }
-		}
-	`
+		}`
 
 func NewWindingTree(httpClient HttpClient, windingTreeUrl string) WindingTreeProvider {
 	return &windingTree{
@@ -86,11 +85,11 @@ func NewWindingTree(httpClient HttpClient, windingTreeUrl string) WindingTreePro
 
 func (p *windingTree) Book(r *Request) (*Response, error) {
 	//TODO replace test with r
-	requestBodyBytes, err := json.Marshal(test)
-	if err != nil {
-		return nil, fmt.Errorf("provider unserialize request err (%v)", err)
-	}
-	requestBody := bytes.NewReader(requestBodyBytes)
+	//requestBodyBytes, err := json.Marshal(r)
+	//if err != nil {
+	//	return nil, fmt.Errorf("provider unserialize request err (%v)", err)
+	//}
+	requestBody := bytes.NewReader([]byte(test))
 
 	req, err := http.NewRequest(http.MethodPost, p.windingTreeUrl, requestBody)
 	if err != nil {

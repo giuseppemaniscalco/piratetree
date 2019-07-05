@@ -40,7 +40,7 @@ func parseResponse(resp *provider.Response) (*response.Response, error) {
 	aResp := new(response.Response)
 
 	//TODO parse provider response
-	aResp.BookingId = resp.BookingId
+	aResp.BookingId = resp.Id
 
 	return aResp, nil
 }
