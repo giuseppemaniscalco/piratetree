@@ -10,8 +10,8 @@ services:
     - read
     - write
     - booking
-    read:
-  image: "windingtree/wt-read-api"
+  read:
+    image: "windingtree/wt-read-api"
     ports:
       - "8081:3000"
     environment:
