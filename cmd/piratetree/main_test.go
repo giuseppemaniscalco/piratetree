@@ -69,12 +69,12 @@ func TestBooking(t *testing.T) {
 			mockProviderResponse: &mockHttpClient{
 				response: &http.Response{
 					StatusCode: http.StatusOK,
-					Body:       fixtureReadCloser(t, "test/data/integration/booking/actualProviderResponse.json"),
+					Body:       fixtureReadCloser(t, "../../test/data/integration/booking/actualProviderResponse.json"),
 				},
 			},
-			actualRequest:    fixtureReadCloser(t, "test/data/integration/booking/actualRequest.json"),
+			actualRequest:    fixtureReadCloser(t, "../../test/data/integration/booking/actualRequest.json"),
 			expectedStatus:   http.StatusOK,
-			expectedResponse: fixtureBytes(t, "test/data/integration/booking/expectedResponse.json"),
+			expectedResponse: fixtureBytes(t, "../../test/data/integration/booking/expectedResponse.json"),
 		},
 	}
 	for name, tt := range dataProvider {
