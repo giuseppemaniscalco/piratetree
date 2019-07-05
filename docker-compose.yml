@@ -1,51 +1,51 @@
 version: '3'
 services:
-#  api:
-#      build: .
-#      ports:
-#      - "8080:80"
-#      env_file:
-#      - .env
-#      links:
-      # - read
-      # - write
-#      - booking
-  # read:
-  #   image: "windingtree/wt-read-api"
-  #   environment:
-  #   - WT_CONFIG=dev
-  #   - WT_SEGMENTS=hotels,airlines
-  #   - WT_HOTEL_DIRECTORY_ADDRESS=0xB309875d8b24D522Ea0Ac57903c8A0b0C93C414A
-  #   - WT_AIRLINE_DIRECTORY_ADDRESS=0x918154a7b2f37ca03e0D05283B5d0d781812DEB6
-  #   - ADAPTER_HTTPS=1
-  #   - ETH_NETWORK_NAME=ropsten
-  #   - ETH_NETWORK_PROVIDER=https://ropsten.infura.io/v3/1b2f83c51559494091be585d3f17be39
-  #   ports:
-  #   - "8081:3000"
-  # write:
-  #   image: "windingtree/wt-write-api"
-  #   environment:
-  #   - WT_CONFIG=dev
-  #   - WT_INDEX_ADDRESS=0xB309875d8b24D522Ea0Ac57903c8A0b0C93C414A
-  #   - ETH_NETOWRK_NAME=ropsten
-  #   - ETH_NETWORK_PROVIDER=https://ropsten.infura.io/v3/1b2f83c51559494091be585d3f17be39
-  #   - DB_CLIENT_OPTIONS='{"filename":"./dev.sqlite"}'
-  #   - DB_CLIENT=sqlite3
-  #   - BASE_URL=https://127.0.0.1:8082
-  #   ports:
-  #   - "8082:8000"
-  booking:
-    image: "jimoshea/coolapp"
+  api:
+    build: .
     ports:
-      - "8083:8935"
-    # environment:
-    # - DB_CLIENT_OPTIONS='{"filename":"./dev.sqlite"}'
-    # - DB_CLIENT=sqlite3
-    # - WT_CONFIG=dev
-    # - NODE_ENV=dev
-    # - BASE_URL=https://127.0.0.1:8083
-    # - READ_API_URL=https://read
-    # - WRITE_API_URL=https://write
-    # - SUPPLIER_ID=0x123456
-    # - WRITE_API_KEY=werdfs12
-    # - WALLET_PASSWORD=windingtree windingtree/wt-booking-api
+    - "8080:80"
+    env_file:
+    - .env
+    links:
+    - read
+    - write
+    - booking
+    read:
+  image: "windingtree/wt-read-api"
+    ports:
+      - "8081:3000"
+    environment:
+    - WT_CONFIG=dev
+    - WT_SEGMENTS=hotels,airlines
+    - WT_HOTEL_DIRECTORY_ADDRESS=0xB309875d8b24D522Ea0Ac57903c8A0b0C93C414A
+    - WT_AIRLINE_DIRECTORY_ADDRESS=0x918154a7b2f37ca03e0D05283B5d0d781812DEB6
+    - ADAPTER_HTTPS=1
+    - ETH_NETWORK_NAME=ropsten
+    - ETH_NETWORK_PROVIDER=https://ropsten.infura.io/v3/1b2f83c51559494091be585d3f17be39
+  write:
+    image: "windingtree/wt-write-api"
+    ports:
+      - "8082:8000"
+    environment:
+    - WT_CONFIG=dev
+    - WT_INDEX_ADDRESS=0xB309875d8b24D522Ea0Ac57903c8A0b0C93C414A
+    - ETH_NETOWRK_NAME=ropsten
+    - ETH_NETWORK_PROVIDER=https://ropsten.infura.io/v3/1b2f83c51559494091be585d3f17be39
+    - DB_CLIENT_OPTIONS='{"filename":"./dev.sqlite"}'
+    - DB_CLIENT=sqlite3
+    - BASE_URL=http://write
+  booking:
+    image: "windingtree/wt-booking-api"
+    ports:
+    - "8083:8935"
+    environment:
+    - DB_CLIENT_OPTIONS='{"filename":"./dev.sqlite"}'
+    - DB_CLIENT=sqlite3
+    - WT_CONFIG=dev
+    - NODE_ENV=dev
+    - BASE_URL=http://booking
+    - READ_API_URL=http://read
+    - WRITE_API_URL=http://write
+    - SUPPLIER_ID=0x123456
+    - WRITE_API_KEY=werdfs12
+    - WALLET_PASSWORD=windingtree windingtree/wt-booking-api

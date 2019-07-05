@@ -20,10 +20,56 @@ type HttpClient interface {
 	Do(*http.Request) (*http.Response, error)
 }
 
+type Address struct {
+	City        string `json:"city"`
+	CountryCode string `json:"countryCode"`
+	Road        string `json:"road"`
+	HouseNumber string `json:"houseNumber"`
+}
+
+type Customer struct {
+	Name    string   `json:"name"`
+	Surname string   `json:"surname"`
+	Address *Address `json:"address"`
+	Email   string   `json:"email"`
+}
+
+type CancellationFee struct {
+	From   string `json:"from"`
+	To     string `json:"to"`
+	Amount uint16 `json:"amount"`
+}
+
+type Pricing struct {
+	Currency         string             `json:"currency"`
+	Total            uint16             `json:"total"`
+	CancellationFees []*CancellationFee `json:"cancellationFees"`
+}
+
+type Room struct {
+	Id           string   `json:"id"`
+	GuestInfoIds []string `json:"guestInfoIds"`
+}
+
+type GuestInfo struct {
+	Id      string `json:"id"`
+	Name    string `json:"name"`
+	Surname string `json:"surname"`
+}
+
+type Booking struct {
+	Arrival   string       `json:"arrival"`
+	Departure string       `json:"departure"`
+	Rooms     []*Room      `json:"rooms"`
+	GuestInfo []*GuestInfo `json:"guestInfo"`
+}
+
 type Request struct {
-	OriginAddress string `json:"originAddress"`
-	HotelId       string `json:"hotelId"`
-	//TODO wt request property
+	OriginAddress string    `json:"originAddress"`
+	HotelId       string    `json:"hotelId"`
+	Customer      *Customer `json:"customer"`
+	Pricing       *Pricing  `json:"pricing"`
+	Booking       *Booking  `json:"booking"`
 }
 
 type Response struct {
@@ -36,46 +82,6 @@ type windingTree struct {
 	windingTreeUrl string
 }
 
-var test = `{
-		  "originAddress": "0x0275e1A76B1C3B67575e66074CdF4fD19D43983A",
-		  "hotelId": "0xcca04822Ad9c178bdf9da9091218e241f4C28042",
-		  "customer": {
-			"name": "Sherlock",
-			"surname": "Holmes",
-			"address": {
-			  "city": "London",
-			  "countryCode": "GB",
-			  "road": "cool street",
-			  "houseNumber": "420"
-			},
-			"email": "sherlock.holmes@houndofthebaskervilles.net"
-		  },
-		  "pricing": {
-			"currency": "RON",
-			"total": 24,
-			"cancellationFees": [
-			  {"from":"2019-07-04","to":"2019-08-08","amount":24}
-			]
-		  },
-		  "booking": {
-			"arrival": "2019-08-29",
-			"departure": "2019-08-30",
-			"rooms": [
-			  {
-				"id": "single-room-economy",
-				"guestInfoIds": ["1"]
-			  }
-			],
-			"guestInfo": [
-			  {
-				"id": "1",
-				"name": "Sherlock",
-				"surname": "Holmes"
-			  }
-			]
-		  }
-		}`
-
 func NewWindingTree(httpClient HttpClient, windingTreeUrl string) WindingTreeProvider {
 	return &windingTree{
 		httpClient:     httpClient,
@@ -84,12 +90,11 @@ func NewWindingTree(httpClient HttpClient, windingTreeUrl string) WindingTreePro
 }
 
 func (p *windingTree) Book(r *Request) (*Response, error) {
-	//TODO replace test with r
-	//requestBodyBytes, err := json.Marshal(r)
-	//if err != nil {
-	//	return nil, fmt.Errorf("provider unserialize request err (%v)", err)
-	//}
-	requestBody := bytes.NewReader([]byte(test))
+	requestBodyBytes, err := json.Marshal(r)
+	if err != nil {
+		return nil, fmt.Errorf("provider unserialize request err (%v)", err)
+	}
+	requestBody := bytes.NewReader(requestBodyBytes)
 
 	req, err := http.NewRequest(http.MethodPost, p.windingTreeUrl, requestBody)
 	if err != nil {
